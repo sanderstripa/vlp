@@ -1,0 +1,12 @@
+{
+  "cpu": "Intel(R) Xeon(R) CPU E3-1230 V2 @ 3.30GHz",
+  "logical_cpus": 8,
+  "ram_gib": 15.965713500976562,
+  "platform": "Windows-11-10.0.26100-SP0",
+  "windows": {
+    "ProductName": "Windows 10 IoT Enterprise LTSC 2024",
+    "EditionID": "IoTEnterpriseS",
+    "CurrentBuild": "26100"
+  },
+  "nvidia": "NVIDIA GeForce GTX 1060 6GB, 6144 MiB, 582.66"
+}

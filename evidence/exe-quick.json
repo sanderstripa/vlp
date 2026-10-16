@@ -1,0 +1,13 @@
+{
+  "video_position_before_ai": 0.125,
+  "audio_backend": "wasapi",
+  "translated_cues": 3,
+  "cache": "<workspace>\\work\\final-exe-data\\cache\\e4032c0626bf356276bb7da4afca270c7a64c4c2093112371a6868a82ccbebb8",
+  "voice_backend": "wasapi",
+  "narration_file": "<workspace>\\work\\final-exe-data\\cache\\e4032c0626bf356276bb7da4afca270c7a64c4c2093112371a6868a82ccbebb8\\98cdf48cf9bf530fcbbb5483.wav",
+  "pause_drift_s": 0.0,
+  "position_after_seek": 4.833333,
+  "voice_after_seek": "<workspace>\\work\\final-exe-data\\cache\\e4032c0626bf356276bb7da4afca270c7a64c4c2093112371a6868a82ccbebb8\\ea3d3f0c06c0b03cbac0481c.wav",
+  "voice_paused": "yes",
+  "video_paused": "yes"
+}

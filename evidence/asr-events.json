@@ -1,0 +1,191 @@
+[
+  {
+    "stage": "profile",
+    "elapsed_s": 0.005,
+    "asr": "Systran/faster-whisper-tiny",
+    "translation": "opus-mt-en-ru-int8",
+    "tts": "Piper Denis medium",
+    "cpu_isa": "AVX",
+    "threads": 4,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "fingerprint",
+    "elapsed_s": 0.005
+  },
+  {
+    "stage": "load_asr",
+    "elapsed_s": 0.085
+  },
+  {
+    "stage": "extract_audio",
+    "elapsed_s": 1.178
+  },
+  {
+    "stage": "extract_audio_done",
+    "elapsed_s": 1.262,
+    "seconds": 0.0829,
+    "media_s": 14.0,
+    "rtf": 0.0059,
+    "cpu_seconds": 0.078125,
+    "rss_mb": 126.5,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "asr",
+    "elapsed_s": 1.262
+  },
+  {
+    "stage": "asr_done",
+    "elapsed_s": 2.331,
+    "seconds": 1.0678,
+    "media_s": 14.0,
+    "rtf": 0.0763,
+    "cpu_seconds": 4.015625,
+    "rss_mb": 130.2,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 2.334
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 2.834,
+    "seconds": 0.4988,
+    "media_s": 2.0,
+    "rtf": 0.2494,
+    "cpu_seconds": 2.0,
+    "rss_mb": 227.8,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 2.834
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 3.906,
+    "seconds": 1.0709,
+    "media_s": 2.0,
+    "rtf": 0.5354,
+    "cpu_seconds": 0.609375,
+    "rss_mb": 227.8,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "first_voice_ready",
+    "elapsed_s": 3.91,
+    "latency_s": 3.91017690001172
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 3.911,
+    "cue": {
+      "start": 0.0,
+      "end": 2.0,
+      "text": "Hello, my friend.",
+      "translated": "Привет, друг мой.",
+      "audio": "<workspace>\\outputs\\LocalDub\\evidence\\tmporgqj6kg\\b785d268bbd375cbc837baa4a44b5ae33c54b9e3f57df4f5130fd65f88d47090\\11e7324fe7cd381eecf6782d.wav"
+    }
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 3.911
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 4.01,
+    "seconds": 0.0985,
+    "media_s": 2.0,
+    "rtf": 0.0492,
+    "cpu_seconds": 0.359375,
+    "rss_mb": 227.8,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 4.011
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 5.002,
+    "seconds": 0.9902,
+    "media_s": 2.0,
+    "rtf": 0.4951,
+    "cpu_seconds": 0.609375,
+    "rss_mb": 227.8,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 5.006,
+    "cue": {
+      "start": 2.0,
+      "end": 4.0,
+      "text": "The train leaves at 7.",
+      "translated": "Поезд отправляется в 7.",
+      "audio": "<workspace>\\outputs\\LocalDub\\evidence\\tmporgqj6kg\\b785d268bbd375cbc837baa4a44b5ae33c54b9e3f57df4f5130fd65f88d47090\\640caab0d22a7760704dfd91.wav"
+    }
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 5.007
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 5.073,
+    "seconds": 0.0654,
+    "media_s": 2.0,
+    "rtf": 0.0327,
+    "cpu_seconds": 0.25,
+    "rss_mb": 227.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 5.073
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 5.959,
+    "seconds": 0.8853,
+    "media_s": 2.0,
+    "rtf": 0.4426,
+    "cpu_seconds": 0.609375,
+    "rss_mb": 227.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 5.963,
+    "cue": {
+      "start": 4.0,
+      "end": 6.0,
+      "text": "We have to go now.",
+      "translated": "Надо уходить.",
+      "audio": "<workspace>\\outputs\\LocalDub\\evidence\\tmporgqj6kg\\b785d268bbd375cbc837baa4a44b5ae33c54b9e3f57df4f5130fd65f88d47090\\8a5ad4fee9038911eca68451.wav"
+    }
+  },
+  {
+    "stage": "buffer",
+    "elapsed_s": 5.967,
+    "ready_until": 14.0,
+    "duration": 14.0
+  },
+  {
+    "stage": "complete",
+    "elapsed_s": 5.97,
+    "cache": "<workspace>\\outputs\\LocalDub\\evidence\\tmporgqj6kg\\b785d268bbd375cbc837baa4a44b5ae33c54b9e3f57df4f5130fd65f88d47090",
+    "ready_until": 14.0,
+    "duration": 14.0
+  }
+]

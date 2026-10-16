@@ -1,0 +1,12 @@
+{
+  "device": "Speakers (High Definition Audio Device)",
+  "main_ao": "wasapi",
+  "voice_ao": "wasapi",
+  "tone_peaks": {
+    "440": 84.27220074759215,
+    "880": 459.7978458172412
+  },
+  "median_noise": 0.0001083459190584758,
+  "samples": 98880,
+  "passed": true
+}

@@ -1,0 +1,32 @@
+name: Windows build and offline pipeline tests
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Install, download pinned components, build
+        shell: pwsh
+        run: ./build.ps1
+      - name: Real offline translation and speech tests
+        shell: pwsh
+        run: ./.venv/Scripts/python.exe -X utf8 ./test_system.py
+      - name: Install NSIS
+        shell: pwsh
+        run: choco install nsis --no-progress -y
+      - name: Package installer
+        shell: pwsh
+        run: ./.venv/Scripts/python.exe ./package.py --compiler 'C:/Program Files (x86)/NSIS/makensis.exe'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LocalDub-Windows-x64
+          path: |
+            release/LocalDub-0.1.0-Setup.exe
+            evidence/*.json

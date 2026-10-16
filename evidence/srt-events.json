@@ -1,0 +1,151 @@
+[
+  {
+    "stage": "profile",
+    "elapsed_s": 0.0,
+    "asr": "Systran/faster-whisper-tiny",
+    "translation": "opus-mt-en-ru-int8",
+    "tts": "Piper Denis medium",
+    "cpu_isa": "AVX",
+    "threads": 4,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "fingerprint",
+    "elapsed_s": 0.0
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 0.087
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 1.991,
+    "seconds": 1.8811,
+    "media_s": 1.8,
+    "rtf": 1.0451,
+    "cpu_seconds": 2.25,
+    "rss_mb": 152.0,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 1.992
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 3.522,
+    "seconds": 1.5296,
+    "media_s": 1.8,
+    "rtf": 0.8498,
+    "cpu_seconds": 0.484375,
+    "rss_mb": 152.0,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "first_voice_ready",
+    "elapsed_s": 3.526,
+    "latency_s": 3.5264116000034846
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 3.527,
+    "cue": {
+      "start": 0.2,
+      "end": 2.0,
+      "text": "Hello, my friend.",
+      "translated": "Привет, друг мой.",
+      "audio": "<workspace>\\outputs\\LocalDub\\evidence\\tmporgqj6kg\\e4032c0626bf356276bb7da4afca270c7a64c4c2093112371a6868a82ccbebb8\\82e230a1decc81d82fd46d5d.wav"
+    }
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 3.527
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 3.635,
+    "seconds": 0.1071,
+    "media_s": 2.3000000000000003,
+    "rtf": 0.0466,
+    "cpu_seconds": 0.421875,
+    "rss_mb": 151.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 3.636
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 4.651,
+    "seconds": 1.0147,
+    "media_s": 2.3000000000000003,
+    "rtf": 0.4412,
+    "cpu_seconds": 0.5625,
+    "rss_mb": 151.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 4.655,
+    "cue": {
+      "start": 2.1,
+      "end": 4.4,
+      "text": "The train leaves at seven.",
+      "translated": "Поезд отправляется в семь.",
+      "audio": "<workspace>\\outputs\\LocalDub\\evidence\\tmporgqj6kg\\e4032c0626bf356276bb7da4afca270c7a64c4c2093112371a6868a82ccbebb8\\98cdf48cf9bf530fcbbb5483.wav"
+    }
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 4.656
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 4.727,
+    "seconds": 0.0709,
+    "media_s": 2.5,
+    "rtf": 0.0284,
+    "cpu_seconds": 0.3125,
+    "rss_mb": 151.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 4.728
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 5.686,
+    "seconds": 0.9583,
+    "media_s": 2.5,
+    "rtf": 0.3833,
+    "cpu_seconds": 0.578125,
+    "rss_mb": 151.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 5.691,
+    "cue": {
+      "start": 4.5,
+      "end": 7.0,
+      "text": "We have to go now.",
+      "translated": "Надо уходить.",
+      "audio": "<workspace>\\outputs\\LocalDub\\evidence\\tmporgqj6kg\\e4032c0626bf356276bb7da4afca270c7a64c4c2093112371a6868a82ccbebb8\\ea3d3f0c06c0b03cbac0481c.wav"
+    }
+  },
+  {
+    "stage": "complete",
+    "elapsed_s": 5.693,
+    "cache": "<workspace>\\outputs\\LocalDub\\evidence\\tmporgqj6kg\\e4032c0626bf356276bb7da4afca270c7a64c4c2093112371a6868a82ccbebb8",
+    "ready_until": 14.0,
+    "duration": 14.0
+  }
+]

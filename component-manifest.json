@@ -1,0 +1,57 @@
+[
+  {
+    "url": "https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/20261016/mpv-dev-x86_64-20261016-git-a2cd83c56d.7z",
+    "file": "mpv.7z",
+    "sha256": "0142058a8d20930f1c086d0c16a593f9e27a8b3fe9d1f4bb3b2ee4a2d5ec994b"
+  },
+  {
+    "url": "https://github.com/GyanD/codexffmpeg/releases/download/9.0.2/ffmpeg-9.0.2-essentials_build.7z",
+    "file": "ffmpeg.7z",
+    "sha256": "4705843ccaaf54257c16ad90f3e952ece33c17df964ecf7bfdbb0f49c7171077"
+  },
+  {
+    "url": "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_windows_amd64.zip",
+    "file": "piper.zip",
+    "sha256": "f3c58906402b24f3a96d92145f58acba6d86c9b5db896d207f78dc80811efcea"
+  },
+  {
+    "url": "https://huggingface.co/ordois/opus-mt-en-ru-ctranslate2-int8/resolve/9ae164a637a7e380d3e09768899c886af9925afe/opus-mt-en-ru-ctranslate2-int8.zip",
+    "file": "translation.zip",
+    "sha256": "f4c3ab9becb25549673ae407c5db73f86bcf57719426e497c592415a5b512bcd"
+  },
+  {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/c10ece1aade47bb51c153c893d14e5bf8e5b7117/ru/ru_RU/denis/medium/MODEL_CARD",
+    "file": "MODEL_CARD",
+    "sha256": "8b5d685dd80f8ad3f8dbbe1c56b16bb0809f00c144af3642dbcf3b707eb89c12"
+  },
+  {
+    "url": "https://huggingface.co/Systran/faster-whisper-tiny/resolve/d90ca5fe260221311c53c58e660288d3deb8d356/model.bin",
+    "file": "whisper-model.bin",
+    "sha256": "dcb76c6586fc06cbdac6dd21f14cfd129cc4cdd9dce19bf4ffa62e59cbe6e6d1"
+  },
+  {
+    "url": "https://huggingface.co/Systran/faster-whisper-tiny/resolve/d90ca5fe260221311c53c58e660288d3deb8d356/config.json",
+    "file": "whisper-config.json",
+    "sha256": "a73a28cdfe1c43ccc7202fa333d1f89c202477271407ae9a7f19afa52039cac8"
+  },
+  {
+    "url": "https://huggingface.co/Systran/faster-whisper-tiny/resolve/d90ca5fe260221311c53c58e660288d3deb8d356/tokenizer.json",
+    "file": "whisper-tokenizer.json",
+    "sha256": "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab"
+  },
+  {
+    "url": "https://huggingface.co/Systran/faster-whisper-tiny/resolve/d90ca5fe260221311c53c58e660288d3deb8d356/vocabulary.txt",
+    "file": "whisper-vocabulary.txt",
+    "sha256": "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913"
+  },
+  {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/c10ece1aade47bb51c153c893d14e5bf8e5b7117/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx",
+    "file": "ru_RU-denis-medium.onnx",
+    "sha256": "15fab56e11a097858ee115545d0f697fc2a316c41a291a5362349fb870411b0a"
+  },
+  {
+    "url": "https://huggingface.co/rhasspy/piper-voices/resolve/c10ece1aade47bb51c153c893d14e5bf8e5b7117/ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx.json",
+    "file": "ru_RU-denis-medium.onnx.json",
+    "sha256": "831c860dac0b5073eaa81610a0a638ec23d90a6cf8e5f871b4485c2cec3767c8"
+  }
+]

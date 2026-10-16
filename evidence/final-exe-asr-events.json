@@ -1,0 +1,247 @@
+[
+  {
+    "stage": "profile",
+    "elapsed_s": 0.001,
+    "asr": "Systran/faster-whisper-tiny",
+    "translation": "opus-mt-en-ru-int8",
+    "tts": "Piper Denis medium",
+    "cpu_isa": "AVX",
+    "threads": 4,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "fingerprint",
+    "elapsed_s": 0.001
+  },
+  {
+    "stage": "load_asr",
+    "elapsed_s": 0.204
+  },
+  {
+    "stage": "resources",
+    "elapsed_s": 1.028,
+    "rss_mb": 108.5,
+    "cpu_percent_one_core": 0,
+    "vram_mb": 0,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "extract_audio",
+    "elapsed_s": 1.3
+  },
+  {
+    "stage": "extract_audio_done",
+    "elapsed_s": 1.542,
+    "seconds": 0.2414,
+    "media_s": 14.0,
+    "rtf": 0.0172,
+    "cpu_seconds": 0.03125,
+    "rss_mb": 122.4,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "asr",
+    "elapsed_s": 1.543
+  },
+  {
+    "stage": "resources",
+    "elapsed_s": 2.125,
+    "rss_mb": 152.9,
+    "cpu_percent_one_core": 137.5,
+    "vram_mb": 0,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "resources",
+    "elapsed_s": 3.131,
+    "rss_mb": 155.2,
+    "cpu_percent_one_core": 295.3,
+    "vram_mb": 0,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "asr_done",
+    "elapsed_s": 3.269,
+    "seconds": 1.7249,
+    "media_s": 14.0,
+    "rtf": 0.1232,
+    "cpu_seconds": 4.265625,
+    "rss_mb": 132.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 3.275
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 3.846,
+    "seconds": 0.5705,
+    "media_s": 2.0,
+    "rtf": 0.2852,
+    "cpu_seconds": 2.015625,
+    "rss_mb": 230.8,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 3.847
+  },
+  {
+    "stage": "resources",
+    "elapsed_s": 4.138,
+    "rss_mb": 324.8,
+    "cpu_percent_one_core": 310.9,
+    "vram_mb": 0,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 4.91,
+    "seconds": 1.0628,
+    "media_s": 2.0,
+    "rtf": 0.5314,
+    "cpu_seconds": 0.53125,
+    "rss_mb": 230.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "first_voice_ready",
+    "elapsed_s": 4.916,
+    "latency_s": 4.91564870000002
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 4.916,
+    "cue": {
+      "start": 0.0,
+      "end": 2.0,
+      "text": "Hello, my friend.",
+      "translated": "Привет, друг мой.",
+      "audio": "<workspace>\\work\\final-exe-data\\cache\\b785d268bbd375cbc837baa4a44b5ae33c54b9e3f57df4f5130fd65f88d47090\\11e7324fe7cd381eecf6782d.wav"
+    }
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 4.917
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 5.016,
+    "seconds": 0.0993,
+    "media_s": 2.0,
+    "rtf": 0.0496,
+    "cpu_seconds": 0.375,
+    "rss_mb": 230.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 5.017
+  },
+  {
+    "stage": "resources",
+    "elapsed_s": 5.148,
+    "rss_mb": 315.2,
+    "cpu_percent_one_core": 75.0,
+    "vram_mb": 0,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 6.073,
+    "seconds": 1.0555,
+    "media_s": 2.0,
+    "rtf": 0.5278,
+    "cpu_seconds": 0.546875,
+    "rss_mb": 230.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 6.077,
+    "cue": {
+      "start": 2.0,
+      "end": 4.0,
+      "text": "The train leaves at 7.",
+      "translated": "Поезд отправляется в 7.",
+      "audio": "<workspace>\\work\\final-exe-data\\cache\\b785d268bbd375cbc837baa4a44b5ae33c54b9e3f57df4f5130fd65f88d47090\\640caab0d22a7760704dfd91.wav"
+    }
+  },
+  {
+    "stage": "translation",
+    "elapsed_s": 6.078
+  },
+  {
+    "stage": "translation_done",
+    "elapsed_s": 6.139,
+    "seconds": 0.0604,
+    "media_s": 2.0,
+    "rtf": 0.0302,
+    "cpu_seconds": 0.25,
+    "rss_mb": 230.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "tts",
+    "elapsed_s": 6.139
+  },
+  {
+    "stage": "resources",
+    "elapsed_s": 6.16,
+    "rss_mb": 239.6,
+    "cpu_percent_one_core": 54.7,
+    "vram_mb": 0,
+    "gpu": "disabled"
+  },
+  {
+    "stage": "tts_done",
+    "elapsed_s": 7.135,
+    "seconds": 0.9955,
+    "media_s": 2.0,
+    "rtf": 0.4978,
+    "cpu_seconds": 0.625,
+    "rss_mb": 230.9,
+    "gpu": "disabled",
+    "vram_mb": 0
+  },
+  {
+    "stage": "cue_ready",
+    "elapsed_s": 7.14,
+    "cue": {
+      "start": 4.0,
+      "end": 6.0,
+      "text": "We have to go now.",
+      "translated": "Надо уходить.",
+      "audio": "<workspace>\\work\\final-exe-data\\cache\\b785d268bbd375cbc837baa4a44b5ae33c54b9e3f57df4f5130fd65f88d47090\\8a5ad4fee9038911eca68451.wav"
+    }
+  },
+  {
+    "stage": "buffer",
+    "elapsed_s": 7.143,
+    "ready_until": 14.0,
+    "duration": 14.0
+  },
+  {
+    "stage": "complete",
+    "elapsed_s": 7.145,
+    "cache": "<workspace>\\work\\final-exe-data\\cache\\b785d268bbd375cbc837baa4a44b5ae33c54b9e3f57df4f5130fd65f88d47090",
+    "ready_until": 14.0,
+    "duration": 14.0
+  },
+  {
+    "stage": "resources",
+    "elapsed_s": 7.164,
+    "rss_mb": 115.5,
+    "cpu_percent_one_core": 54.7,
+    "vram_mb": 0,
+    "gpu": "disabled"
+  }
+]
