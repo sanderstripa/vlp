@@ -75,7 +75,7 @@ def launch(smoke=None,smoke_full=False):
             ttk.Button(row,text='Открыть SRT',command=self.add_sub).pack(side='left',padx=5)
             row=ttk.Frame(self.root); row.pack(fill='x',padx=12,pady=5)
             self.lang=ttk.Combobox(row,state='readonly',values=['Английский → Русский'],width=24); self.lang.current(0); self.lang.pack(side='left')
-            self.mode=ttk.Combobox(row,state='readonly',values=['Быстрый · буфер 8 с','Полностью заранее'],width=23); self.mode.current(0); self.mode.pack(side='left',padx=8)
+            self.mode=ttk.Combobox(row,state='readonly',values=['Быстрый · старт от 4 с','Полностью заранее'],width=23); self.mode.current(0); self.mode.pack(side='left',padx=8)
             self.translate_button=ttk.Button(row,text='Перевести',command=self.translate); self.translate_button.pack(side='left')
             ttk.Button(row,text='Остановить ИИ',command=self.stop_ai).pack(side='left',padx=5)
             ttk.Button(row,text='Сохранить SRT + WAV',command=self.export).pack(side='right')
