@@ -30,9 +30,16 @@ class Integration(unittest.TestCase):
                 for mode,subtitle in [('srt',ROOT/'test-video.srt'),('asr',None)]:
                     events=[]; pipeline=Pipeline(ROOT/'test-video.mp4',subtitle,emit=events.append,cache_root=folder)
                     pipeline.execute()
-                    self.assertEqual(len(pipeline.cues),3)
+                    atomic(EVIDENCE/f'{mode}-events.json',events)
+                    # ASR/VAD may group adjacent sentences into one segment.
+                    # Verify all spoken content, not a model-specific segment count.
+                    if mode=='srt':self.assertEqual(len(pipeline.cues),3)
+                    else:
+                        source=' '.join(c.text.lower() for c in pipeline.cues)
+                        for phrase in ('friend','train','go now'):self.assertIn(phrase,source)
+                        self.assertTrue(all(0<=c.start<c.end<=14 for c in pipeline.cues))
                     self.assertTrue(all(any('\u0400'<=ch<='\u04ff' for ch in c.translated) for c in pipeline.cues))
-                    self.assertIn('Поезд',pipeline.cues[1].translated)
+                    self.assertIn('поезд',' '.join(c.translated.lower() for c in pipeline.cues))
                     output=EVIDENCE/f'{mode}-narration.wav'; export_audio(pipeline.cues,pipeline.duration,output)
                     with wave.open(str(output)) as f:
                         self.assertAlmostEqual(f.getnframes()/f.getframerate(),14,places=2)
@@ -43,7 +50,7 @@ class Integration(unittest.TestCase):
                     again.translate=lambda _:self.fail('Translation invoked on cached media')
                     again.speak=lambda *_:self.fail('TTS invoked on cached media')
                     before=time.perf_counter(); again.execute()
-                    self.assertEqual(sum(e['stage']=='cache_hit' for e in cached),3)
+                    self.assertEqual(sum(e['stage']=='cache_hit' for e in cached),len(pipeline.cues))
                     self.assertFalse(any(e['stage']=='load_asr' for e in cached))
                     summaries[mode]={'total_s':events[-1]['elapsed_s'],'first_voice_s':next(e['latency_s'] for e in events if e['stage']=='first_voice_ready'),
                                      'cache_reopen_s':time.perf_counter()-before,'translations':[c.translated for c in pipeline.cues]}
