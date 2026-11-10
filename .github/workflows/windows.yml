@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main, prototype/fast-start]
-pull_request:
+  pull_request:
     branches: [main]
 jobs:
   build:
