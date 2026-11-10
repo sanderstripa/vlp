@@ -2,6 +2,8 @@ name: Windows build and offline pipeline tests
 on:
   workflow_dispatch:
   push:
+    branches: [main, prototype/fast-start]
+pull_request:
     branches: [main]
 jobs:
   build:
@@ -15,6 +17,9 @@ jobs:
       - name: Install, download pinned components, build
         shell: pwsh
         run: ./build.ps1
+      - name: Scheduler regression tests
+        shell: pwsh
+        run: ./.venv/Scripts/python.exe -m unittest -v test_prototype
       - name: Real offline translation and speech tests
         shell: pwsh
         run: ./.venv/Scripts/python.exe -X utf8 ./test_system.py
@@ -28,5 +33,5 @@ jobs:
         with:
           name: LocalDub-Windows-x64
           path: |
-            release/LocalDub-0.1.0-Setup.exe
+            release/LocalDub-0.2.0-Setup.exe
             evidence/*.json
