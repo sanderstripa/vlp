@@ -10,7 +10,7 @@ from core import ROOT, DATA, NO_WINDOW, Cue, Pipeline, export_audio, srt
 
 def worker(args):
     def emit(e): print(json.dumps(e,ensure_ascii=False),flush=True)
-    p=Pipeline(args.media,args.subtitle,track=args.track,emit=emit)
+    p=Pipeline(args.media,args.subtitle,track=args.track,emit=emit,start_at=args.start_at)
     # Real wall-clock sampling includes native child processes, unlike process_time.
     done=threading.Event()
     def sample():
@@ -40,7 +40,7 @@ def launch(smoke=None,smoke_full=False):
             self.root=tk.Tk(); self.root.title('LocalDub · офлайн-плеер'); self.root.geometry('1060x710'); self.root.minsize(850,550)
             self.root.configure(bg='#17191d'); self.events=queue.Queue(); self.proc=None; self.cues=[]; self.media=None
             self.complete=False; self.preparing=False; self.translation=False; self.ready=0.; self.cache=None; self.start_at=0.
-            self.want_pause=True; self.tracks=[]; self.duration=0.; self.auto_started=False
+            self.ranges=[]; self.want_pause=True; self.tracks=[]; self.duration=0.; self.auto_started=False
             self.last_wait=None; self.last_sync_log=0.; self.ai_clicked=None; self.first_audible_recorded=False
             self.closed=False
             style=ttk.Style(); style.theme_use('clam')
@@ -75,7 +75,7 @@ def launch(smoke=None,smoke_full=False):
             ttk.Button(row,text='Открыть SRT',command=self.add_sub).pack(side='left',padx=5)
             row=ttk.Frame(self.root); row.pack(fill='x',padx=12,pady=5)
             self.lang=ttk.Combobox(row,state='readonly',values=['Английский → Русский'],width=24); self.lang.current(0); self.lang.pack(side='left')
-            self.mode=ttk.Combobox(row,state='readonly',values=['Быстрый · буфер 10 с','Полностью заранее'],width=23); self.mode.current(0); self.mode.pack(side='left',padx=8)
+            self.mode=ttk.Combobox(row,state='readonly',values=['Быстрый · старт от 4 с','Полностью заранее'],width=23); self.mode.current(0); self.mode.pack(side='left',padx=8)
             self.translate_button=ttk.Button(row,text='Перевести',command=self.translate); self.translate_button.pack(side='left')
             ttk.Button(row,text='Остановить ИИ',command=self.stop_ai).pack(side='left',padx=5)
             ttk.Button(row,text='Сохранить SRT + WAV',command=self.export).pack(side='right')
@@ -125,6 +125,8 @@ def launch(smoke=None,smoke_full=False):
             self.dragging=False
             if self.media:
                 self.narration.stop(); self.video.command('seek',value,'absolute+exact')
+                if self.translation and not self.complete and not any(lo<=value<hi for lo,hi in self.ranges):
+                    self.translate(position=value)
         def stop_ai(self):
             if self.proc and self.proc.poll() is None:
                 import psutil
@@ -139,14 +141,16 @@ def launch(smoke=None,smoke_full=False):
             self.proc=None; self.preparing=False; self.translation=False
             if hasattr(self,'narration'):self.narration.stop()
             self.events=queue.Queue()
-        def translate(self):
+        def translate(self, position=None):
             if not self.media:return
-            self.stop_ai(); self.cues=[]; self.ready=0; self.complete=False; self.cache=None
+            self.stop_ai(); self.cues=[]; self.ranges=[]; self.ready=0; self.complete=False; self.cache=None
             self.translation=True; self.preparing=True; self.auto_started=False
             self.ai_clicked=time.perf_counter(); self.first_audible_recorded=False; self.last_wait=None
-            self.start_at=float(self.video.get('time-pos',0) or 0); self.want_pause=True
+            self.start_at=float(self.video.get('time-pos',0) or 0) if position is None else position
+            if self.mode.current()==1:self.start_at=0.
+            self.want_pause=True; self.video.set('pause',True)
             args=[sys.executable] if getattr(sys,'frozen',False) else [sys.executable,'-X','utf8',str(ROOT/'app.py')]
-            args+=['--worker','--media',str(self.media),'--track',str(max(0,self.audio.current()))]
+            args+=['--worker','--media',str(self.media),'--track',str(max(0,self.audio.current())),'--start-at',str(self.start_at)]
             # Explicit external SRT wins. Otherwise extract a selected/source-language text subtitle.
             subtitle=self.sidecar
             selected=self.subtitles[self.subs.current()-1] if self.subs.current()>0 else None
@@ -195,8 +199,9 @@ def launch(smoke=None,smoke_full=False):
                     except queue.Empty:break
                     stage=event['stage']
                     if stage=='cue_ready':
-                        c=Cue(**event['cue']); self.cues.append(c); self.ready=max(self.ready,c.end)
-                    elif stage=='buffer':self.ready=event['ready_until']
+                        c=Cue(**event['cue']); self.cues.append(c); self.cues.sort(key=lambda c:c.start)
+                    elif stage=='buffer':
+                        self.ranges=event['ranges']; self.ready=event['ready_until']
                     elif stage=='complete':
                         self.complete=True; self.preparing=False; self.ready=event['duration']; self.cache=event['cache']
                         self.status['text']='Перевод готов · локальный кэш сохранён'; self.progress['value']=100
@@ -214,9 +219,9 @@ def launch(smoke=None,smoke_full=False):
                     def clock(t):return f'{int(t)//60:02}:{int(t)%60:02}'
                     self.clock['text']=f'{clock(pos)} / {clock(self.duration)}'
                     if self.translation and not self.auto_started:
-                        enough=self.complete or (self.mode.current()==0 and self.ready>=self.start_at+10)
+                        enough=self.complete or (self.mode.current()==0 and self.ready>=min(self.duration,self.start_at+4))
                         if enough:self.auto_started=True; self.want_pause=False
-                    waiting=self.translation and not self.complete and (not self.auto_started or pos+.25>=self.ready)
+                    waiting=self.translation and not self.complete and (not self.auto_started or not any(lo<=pos and min(pos+.25,self.duration)<=hi for lo,hi in self.ranges))
                     paused=self.want_pause or waiting
                     self.video.set('pause',paused)
                     if self.translation:
@@ -285,6 +290,7 @@ def launch(smoke=None,smoke_full=False):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(); parser.add_argument('--worker',action='store_true'); parser.add_argument('--setup',action='store_true')
     parser.add_argument('--media'); parser.add_argument('--subtitle'); parser.add_argument('--track',type=int,default=0); parser.add_argument('--extract-sub',type=int)
+    parser.add_argument('--start-at',type=float,default=0.)
     parser.add_argument('--smoke',help='Write automated GUI smoke evidence JSON and PNG')
     parser.add_argument('--smoke-full',action='store_true')
     args=parser.parse_args()

@@ -36,6 +36,22 @@ def atomic(path, data):
 def digest(path):
     with Path(path).open('rb') as f: return hashlib.file_digest(f, 'sha256').hexdigest()
 
+def media_fingerprint(path, block_size=65536):
+    """Bounded I/O identity: size, nanosecond mtime and three sampled blocks."""
+    path=Path(path); stat=path.stat(); h=hashlib.sha256()
+    h.update(f'{stat.st_size}:{stat.st_mtime_ns}'.encode())
+    with path.open('rb') as stream:
+        for offset in sorted({0, max(0,stat.st_size//2-block_size//2), max(0,stat.st_size-block_size)}):
+            stream.seek(offset); h.update(stream.read(block_size))
+    return h.hexdigest()
+
+
+def block_order(duration, position=0., block=8):
+    count=__import__('math').ceil(duration/block)
+    pivot=min(max(0,int(position//block)),max(0,count-1))
+    return list(range(pivot,count))+list(range(pivot))
+
+
 def probe(path):
     return json.loads(run([ROOT/'native/ffprobe.exe', '-v','error','-show_format','-show_streams','-of','json', path]))
 
@@ -72,12 +88,13 @@ class Cancelled(Exception): pass
 
 class Pipeline:
     """Single sequential CPU worker. All published audio is immutable and atomic."""
-    def __init__(self, media, subtitle=None, source='en', target='ru', track=0, emit=lambda e:None, cache_root=None):
+    def __init__(self, media, subtitle=None, source='en', target='ru', track=0, emit=lambda e:None, cache_root=None, start_at=0.):
         if (source,target) != ('en','ru'): raise ValueError('В MVP установлена только пара английский → русский.')
         self.media=Path(media); self.subtitle=Path(subtitle) if subtitle else None
         self.source=source; self.target=target; self.track=int(track); self.emit=emit
         self.stop=threading.Event(); self.cues=[]; self.ready_until=0.; self.duration=0.; self.cache=None
         self.cache_root=Path(cache_root or DATA/'cache'); self.started=time.perf_counter(); self.first=False
+        self.start_at=max(0.,float(start_at)); self.ranges=[]
         self.mt=None; self.asr=None; self.sp=None
 
     def check(self):
@@ -138,7 +155,7 @@ class Pipeline:
             raw.unlink(missing_ok=True); tmp.unlink(missing_ok=True)
 
     def save(self, complete=False):
-        atomic(self.cache/'state.json',{'schema':1,'duration':self.duration,'ready_until':self.ready_until,
+        atomic(self.cache/'state.json',{'schema':2,'duration':self.duration,'ready_until':self.ready_until,'ranges':self.ranges,
                'complete':complete,'cues':[asdict(c) for c in self.cues]})
         (self.cache/'translated.srt').write_text(srt([c for c in self.cues if c.audio]),'utf-8-sig')
         (self.cache/'source.srt').write_text(srt(self.cues,False),'utf-8-sig')
@@ -157,7 +174,7 @@ class Pipeline:
                 cue.translated=self.timed('translation',lambda:self.translate(cue.text),cue.end-cue.start)
                 self.timed('tts',lambda:self.speak(cue,audio),cue.end-cue.start)
                 cue.audio=str(audio); atomic(meta,asdict(cue))
-            self.cues.append(cue); self.save()
+            self.cues.append(cue); self.cues.sort(key=lambda c:c.start); self.save()
             if not self.first:
                 self.first=True; self.event('first_voice_ready',latency_s=time.perf_counter()-self.started)
             self.event('cue_ready',cue=asdict(cue))
@@ -167,21 +184,26 @@ class Pipeline:
             self.event('profile',asr='Systran/faster-whisper-tiny',translation='opus-mt-en-ru-int8',
                        tts='Piper Denis medium',cpu_isa=os.environ['CT2_FORCE_CPU_ISA'],threads=4,gpu='disabled')
             self.event('fingerprint')
-            identity={'video':digest(self.media),'subtitle':digest(self.subtitle) if self.subtitle else None,
-                      'source':self.source,'target':self.target,'track':self.track,'pipeline':4,
+            identity={'video':media_fingerprint(self.media),'subtitle':digest(self.subtitle) if self.subtitle else None,
+                      'source':self.source,'target':self.target,'track':self.track,'pipeline':5,
                       'models':digest(ROOT/'component-manifest.json')}
             self.cache=self.cache_root/hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest()
             self.cache.mkdir(parents=True,exist_ok=True); atomic(self.cache/'identity.json',identity)
             info=probe(self.media); self.duration=float(info['format']['duration'])
+            subtitle_cues=None
             if self.subtitle:
-                cues=parse_srt(self.subtitle.read_text('utf-8-sig'))
-                if not cues: raise RuntimeError('В SRT нет корректных реплик. Нужен текстовый UTF-8 SRT.')
-                self.prepare_cues(cues)
-                self.ready_until=self.duration
-            else:
-                for start in range(0,int(self.duration)+1,25):
-                    self.check(); length=min(25,self.duration-start)
-                    if length<=.05: break
+                subtitle_cues=parse_srt(self.subtitle.read_text('utf-8-sig'))
+                if not subtitle_cues: raise RuntimeError('В SRT нет корректных реплик. Нужен текстовый UTF-8 SRT.')
+            # Fixed block boundaries preserve cache reuse after arbitrary seeks.
+            for index in block_order(self.duration,self.start_at):
+                self.check(); start=index*8; length=min(8,self.duration-start)
+                if subtitle_cues is not None:
+                    cues=[c for c in subtitle_cues if start<=c.start<start+length]
+                    # A subtitle crossing the initial boundary must also be available.
+                    if not self.ranges:
+                        cues=[c for c in subtitle_cues if c.start<start<c.end]+cues
+                    cues=[c for c in cues if not any(x.start==c.start and x.end==c.end and x.text==c.text for x in self.cues)]
+                else:
                     transcript=self.cache/f'asr-{start}.json'
                     if transcript.exists(): cues=[Cue(**c) for c in json.loads(transcript.read_text('utf-8'))]
                     else:
@@ -194,12 +216,21 @@ class Pipeline:
                         self.timed('extract_audio',lambda:run([ROOT/'native/ffmpeg.exe','-v','error','-y','-ss',start,
                             '-i',self.media,'-t',length,'-map',f'0:a:{self.track}','-ar','16000','-ac','1',wav]),length)
                         def recognize():
-                            segments,_=self.asr.transcribe(str(wav),language=self.source,beam_size=1,vad_filter=False,
+                            segments,_=self.asr.transcribe(str(wav),language=self.source,beam_size=1,vad_filter=True,
+                                                          vad_parameters={"min_silence_duration_ms":300,"speech_pad_ms":200},
                                                           condition_on_previous_text=False)
                             return [Cue(start+s.start,min(start+s.end,start+length),s.text.strip()) for s in segments if s.text.strip() and s.end>s.start]
                         cues=self.timed('asr',recognize,length); atomic(transcript,[asdict(c) for c in cues]); wav.unlink(missing_ok=True)
-                    self.prepare_cues(cues); self.ready_until=start+length; self.save()
-                    self.event('buffer',ready_until=self.ready_until,duration=self.duration)
+                self.prepare_cues(cues)
+                # Only completed blocks (including silence) establish safe playback coverage.
+                self.ranges.append([start,start+length]); self.ranges.sort()
+                merged=[]
+                for lo,hi in self.ranges:
+                    if merged and lo<=merged[-1][1]: merged[-1][1]=max(merged[-1][1],hi)
+                    else: merged.append([lo,hi])
+                self.ranges=merged
+                self.ready_until=next((hi for lo,hi in merged if lo<=self.start_at<=hi),0.)
+                self.save(); self.event('buffer',ready_until=self.ready_until,duration=self.duration,ranges=[r[:] for r in self.ranges])
             self.save(True); self.event('complete',cache=str(self.cache),ready_until=self.duration,duration=self.duration)
         except Cancelled: self.event('cancelled')
         except Exception as e: self.event('error',message=str(e)); raise
