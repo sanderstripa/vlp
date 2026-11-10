@@ -216,7 +216,8 @@ class Pipeline:
                         self.timed('extract_audio',lambda:run([ROOT/'native/ffmpeg.exe','-v','error','-y','-ss',start,
                             '-i',self.media,'-t',length,'-map',f'0:a:{self.track}','-ar','16000','-ac','1',wav]),length)
                         def recognize():
-                            segments,_=self.asr.transcribe(str(wav),language=self.source,beam_size=1,vad_filter=False,
+                            segments,_=self.asr.transcribe(str(wav),language=self.source,beam_size=1,vad_filter=True,
+                                                          vad_parameters={"min_silence_duration_ms":300,"speech_pad_ms":200},
                                                           condition_on_previous_text=False)
                             return [Cue(start+s.start,min(start+s.end,start+length),s.text.strip()) for s in segments if s.text.strip() and s.end>s.start]
                         cues=self.timed('asr',recognize,length); atomic(transcript,[asdict(c) for c in cues]); wav.unlink(missing_ok=True)
